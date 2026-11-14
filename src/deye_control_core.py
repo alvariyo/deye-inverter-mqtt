@@ -102,6 +102,7 @@ def decode(regs, started, completed):
         "read_started_at": started,
         "measured_at": completed,
         "revision": configuration_revision(regs),
+        "configuration_registers": {str(address): regs[address] for address in CONFIG_REGS},
         "grid_connected": {0: False, 1: True}.get(regs[194]),
         "grid_voltage_v": round(regs[150] * 0.1, 1),
         "grid_power_w": signed(regs[169]),
@@ -252,7 +253,7 @@ class Engine:
             ]
             return {
                 "schema": 1,
-                "version": "0.2.0",
+                "version": "0.2.1",
                 "model": "SUN-5K-SG03LP1",
                 "boot_id": self.boot_id,
                 "read_seq": self.read_seq,

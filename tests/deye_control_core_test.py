@@ -68,6 +68,15 @@ class FakeModbus:
 
 
 class EngineTests(unittest.TestCase):
+    def test_configuration_snapshot_contains_full_tou_and_keeps_revision_contract(self):
+        regs = sample_regs()
+        sample = decode(regs, 1, 2)
+        raw = sample["configuration_registers"]
+        self.assertEqual({str(n) for n in (248, *range(250, 280))}, {key for key in raw if int(key) >= 248})
+        self.assertEqual(configuration_revision({int(k): v for k, v in raw.items()}), sample["revision"])
+        regs[248] ^= 1
+        self.assertNotEqual(configuration_revision(regs), sample["revision"])
+
     def setUp(self):
         self.directory = tempfile.TemporaryDirectory()
         self.bus = FakeModbus()

@@ -156,6 +156,14 @@ no older than 90 s from its start, with ordered timestamps and no future time.
 Failure invalidates availability even when a previous sample remains visible.
 These checks do not establish exclusive ownership against external writers.
 
+Since control version 0.2.1, `sample.configuration_registers` exposes the same
+37 known configuration registers used by the revision hash. This includes the
+complete single-phase TOU register set (248 and 250–279), so a local/cloud router
+can retain a coherent, physically read configuration for its fallback checks.
+Register 249 is not part of this contract. The hash
+algorithm, supported writes and journal schema remain unchanged; obtaining this
+snapshot performs no additional inverter I/O.
+
 ## CLI
 
 The included client reads existing MQTT configuration internally and opens no
